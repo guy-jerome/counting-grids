@@ -15,5 +15,10 @@ describe("Counting Grid Test", () => {
     test("A positive value on the edge of the grid", () => {
       expect(main(10, 10, 3, [[2, 2]])).toBe(23);
     }),
-    test("");
+    test("1X10 check", () => {
+      expect(main(1, 10, 2, [[0, 3]])).toBe(5);
+    }),
+    test("10x1 check", () => {
+      expect(main(10, 1, 3, [[1, 0]])).toBe(5);
+    });
 });
