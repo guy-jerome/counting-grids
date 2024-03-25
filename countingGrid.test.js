@@ -14,5 +14,6 @@ describe("Counting Grid Test", () => {
     }),
     test("A positive value on the edge of the grid", () => {
       expect(main(10, 10, 3, [[2, 2]])).toBe(23);
-    });
+    }),
+    test("");
 });
