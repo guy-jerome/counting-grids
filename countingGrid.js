@@ -7,6 +7,8 @@
 // 0 1 1 1 0
 // 0 0 1 0 0
 
+const { array } = require("yargs");
+
 // Hint: Manhattan distance: [x1 - x2] + [y1 - y2]
 
 // Refer back to the grid cell neighborhood PDF for more details, assumptions, and examples
@@ -55,23 +57,37 @@ class Matrix {
       );
     }, 0);
   }
+  setCellToPositive(XYArray) {
+    this.matrix[XYArray[0]][XYArray[1]] = 1;
+  }
+  bruteForceCheck(positiveCellsXYArray, n) {
+    for (let array of positiveCellsXYArray) {
+      this.setCellToPositive(array);
+      for (let i = 0; i < this.rowYCount; i++) {
+        for (let j = 0; j < this.collXCount; j++) {
+          if (checkInRange(array, [j, i], n)) {
+            this.setCellToPositive([j, i]);
+          }
+        }
+      }
+    }
+  }
 }
 
-matrix = new Matrix(5, 5, 1);
-console.log(matrix.getPositive());
-
 function main(collXCount, rowYCount, n, positiveCellsXYArray) {
-  let count = 0;
-
-  // *** Implement this function ***
+  const grid = new Matrix(collXCount, rowYCount);
+  grid.bruteForceCheck(positiveCellsXYArray, n);
+  return grid.getPositive();
 }
 
 // *** General test cases - feel free to expand and add more (we will be adding more when testing your code) ***
-// main(10, 10, 3, [[5, 5]]); //will return 25
-// main(10, 10, 2, [
-//   [7, 3],
-//   [3, 7],
-// ]); //will return 26
-// main(10, 10, 3, [[2, 2]]); //will return 23
+console.log(main(10, 10, 3, [[5, 5]])); //will return 25
+console.log(
+  main(10, 10, 2, [
+    [7, 3],
+    [3, 7],
+  ])
+); //will return 26
+console.log(main(10, 10, 3, [[2, 2]])); //will return 23
 
 module.exports = main;
