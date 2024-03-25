@@ -28,6 +28,38 @@ function checkInRange(XYArray1, XYArray2, n) {
   return distance <= n ? true : false;
 }
 
+class Matrix {
+  constructor(collXCount, rowYCount, defaultValue = 0) {
+    this.collXCount = collXCount;
+    this.rowYCount = rowYCount;
+    this.defaultValue = defaultValue;
+    this.matrix = [];
+    for (let i = 0; i < rowYCount; i++) {
+      let row = [];
+      for (let j = 0; j < collXCount; j++) {
+        row.push(defaultValue);
+      }
+      this.matrix.push(row);
+    }
+  }
+  getMatrix() {
+    return this.matrix;
+  }
+  getPositive() {
+    return this.matrix.reduce((count, row) => {
+      return (
+        count +
+        row.reduce((rowCount, value) => {
+          return rowCount + value;
+        }, 0)
+      );
+    }, 0);
+  }
+}
+
+matrix = new Matrix(5, 5, 1);
+console.log(matrix.getPositive());
+
 function main(collXCount, rowYCount, n, positiveCellsXYArray) {
   let count = 0;
 
