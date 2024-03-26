@@ -30,10 +30,10 @@ class Matrix {
 
   // Prints the matrix to the console
   printMatrix() {
-    for (let col = 0; col < this.collXCount; col++) {
+    for (let row = 0; row < this.rowYCount; row++) {
       let rowData = [];
-      for (let row = 0; row < this.rowYCount; row++) {
-        rowData.push(this.matrix[row][col]);
+      for (let col = 0; col < this.collXCount; col++) {
+        rowData.push(this.matrix[col][row]); // Corrected access to matrix elements
       }
       console.log(rowData.join());
     }
@@ -45,15 +45,15 @@ class Matrix {
       return (
         count +
         row.reduce((rowCount, value) => {
-          return rowCount + value;
+          return value ? rowCount + 1 : rowCount;
         }, 0)
       );
     }, 0);
   }
 
   // Sets a cell in the matrix to a positive value
-  setCellToPositive(XYArray) {
-    this.matrix[XYArray[0]][XYArray[1]] = 1;
+  setCellToPositive(XYArray, value = 1) {
+    this.matrix[XYArray[0]][XYArray[1]] = value;
   }
 
   // Checks if a given cell is inside the matrix
@@ -84,8 +84,9 @@ class Matrix {
   // Applies the adjacent walk positive cell filling algorithm to the matrix
   // This algorithm finds all of the positive neighbors by incrementally expanding the ring of neighbors based on the n value.
   adjacentWalkCheck(positiveCellsXYArray, n) {
+    let arrayCount = 1; //This is used to prevent overlapping problems from preventing expanding the search ring
     for (let array of positiveCellsXYArray) {
-      this.setCellToPositive(array); // Sets the input array to a positive number
+      this.setCellToPositive(array, arrayCount); // Sets the input array to a positive number
       let activeCells = [];
       activeCells.push(array); // initializes the the first array to check
       let nextCells = [];
@@ -104,10 +105,13 @@ class Matrix {
             // check if cell is within bounds of the matrix and is negative
             if (
               this.checkIfInside([cell[0] + dir[0], cell[1] + dir[1]]) &&
-              this.matrix[cell[0] + dir[0]][cell[1] + dir[1]] === 0
+              this.matrix[cell[0] + dir[0]][cell[1] + dir[1]] !== arrayCount
             ) {
               // Set the cell to a positive value and then add it to the next layer cells to be checked.
-              this.setCellToPositive([cell[0] + dir[0], cell[1] + dir[1]]);
+              this.setCellToPositive(
+                [cell[0] + dir[0], cell[1] + dir[1]],
+                arrayCount
+              );
               nextCells.push([cell[0] + dir[0], cell[1] + dir[1]]);
             }
           }
@@ -119,6 +123,7 @@ class Matrix {
         activeCells = nextCells;
         nextCells = [];
       }
+      arrayCount++;
     }
   }
 }
@@ -131,9 +136,9 @@ function main(collXCount, rowYCount, n, positiveCellsXYArray) {
   // n: number - distance threshold
   // positiveCellsXYArray: Array<Array>> - array of [x,y] arrays. Ex: [[1,3], [5,5], [5,8]]
   const grid = new Matrix(collXCount, rowYCount);
-  // grid.bruteForceCheck(positiveCellsXYArray, n) //This is the more costly method that uses a brute force algorithm
+  // grid.bruteForceCheck(positiveCellsXYArray, n); //This is the more costly method that uses a brute force algorithm
   grid.adjacentWalkCheck(positiveCellsXYArray, n);
-  //grid.printMatrix(); //You can print out the array if you want to see a simple visual in the console.
+  grid.printMatrix(); //You can print out the array if you want to see a simple visual in the console.
 
   return grid.getPositive();
 }
@@ -146,9 +151,11 @@ function main(collXCount, rowYCount, n, positiveCellsXYArray) {
 // ]); //will return 26
 // main(10, 10, 3, [[2, 2]]); //will return 23
 console.log(
-  main(10, 10, 0, [
-    [1, 2],
-    [3, 5],
+  main(10, 10, 3, [
+    [5, 5],
+    [6, 5],
+    [5, 6],
+    [6, 6],
   ])
 );
 module.exports = main;
