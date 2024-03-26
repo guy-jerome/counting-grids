@@ -138,24 +138,17 @@ function main(collXCount, rowYCount, n, positiveCellsXYArray) {
   const grid = new Matrix(collXCount, rowYCount);
   // grid.bruteForceCheck(positiveCellsXYArray, n); //This is the more costly method that uses a brute force algorithm
   grid.adjacentWalkCheck(positiveCellsXYArray, n);
-  grid.printMatrix(); //You can print out the array if you want to see a simple visual in the console.
+  //grid.printMatrix(); //You can print out the array if you want to see a simple visual in the console.
 
   return grid.getPositive();
 }
 
 // Example usage
-// main(10, 10, 3, [[5, 5]]); //will return 25
-// main(10, 10, 2, [
-//   [7, 3],
-//   [3, 7],
-// ]); //will return 26
-// main(10, 10, 3, [[2, 2]]); //will return 23
-console.log(
-  main(10, 10, 3, [
-    [5, 5],
-    [6, 5],
-    [5, 6],
-    [6, 6],
-  ])
-);
+main(10, 10, 3, [[5, 5]]); //will return 25
+main(10, 10, 2, [
+  [7, 3],
+  [3, 7],
+]); //will return 26
+main(10, 10, 3, [[2, 2]]); //will return 23
+// Note to check for every test use npm run test.
 module.exports = main;
