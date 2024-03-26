@@ -20,5 +20,13 @@ describe("Counting Grid Test", () => {
     }),
     test("10x1 check", () => {
       expect(main(10, 1, 3, [[1, 0]])).toBe(5);
+    }),
+    test("A zero n value", () => {
+      expect(
+        main(10, 10, 0, [
+          [1, 2],
+          [3, 5],
+        ])
+      ).toBe(2);
     });
 });
