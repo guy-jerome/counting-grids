@@ -66,6 +66,10 @@ class Matrix {
     return true;
   }
 
+  checkAndSetToPositive(XYArray) {
+    this.checkIfInside(XYArray) && this.setCellToPositive(XYArray);
+  }
+
   // Applies the brute-force positive cell filling algorithm to the matrix
   bruteForceCheck(positiveCellsXYArray, n) {
     for (let array of positiveCellsXYArray) {
@@ -126,6 +130,22 @@ class Matrix {
       arrayCount++;
     }
   }
+  downTheLineCheck(positiveCellsXYArray, n) {
+    for (let array of positiveCellsXYArray) {
+      for (let i = n; i >= 0; i--) {
+        for (let j = 0; j <= n - i; j++) {
+          this.checkAndSetToPositive([array[0] - i, array[1] + j]);
+          this.checkAndSetToPositive([array[0] - i, array[1] - j]);
+        }
+      }
+      for (let i = 1; i <= n; i++) {
+        for (let j = 0; j <= n - i; j++) {
+          this.checkAndSetToPositive([array[0] + i, array[1] + j]);
+          this.checkAndSetToPositive([array[0] + i, array[1] - j]);
+        }
+      }
+    }
+  }
 }
 
 // Main function to run the algorithm
@@ -136,19 +156,20 @@ function main(collXCount, rowYCount, n, positiveCellsXYArray) {
   // n: number - distance threshold
   // positiveCellsXYArray: Array<Array>> - array of [x,y] arrays. Ex: [[1,3], [5,5], [5,8]]
   const grid = new Matrix(collXCount, rowYCount);
-  // grid.bruteForceCheck(positiveCellsXYArray, n); //This is the more costly method that uses a brute force algorithm
-  grid.adjacentWalkCheck(positiveCellsXYArray, n);
+  //grid.bruteForceCheck(positiveCellsXYArray, n); //This is the more costly method that uses a brute force algorithm
+  //grid.adjacentWalkCheck(positiveCellsXYArray, n);
+  grid.downTheLineCheck(positiveCellsXYArray, n);
   //grid.printMatrix(); //You can print out the array if you want to see a simple visual in the console.
 
   return grid.getPositive();
 }
 
 // Example usage
-main(10, 10, 3, [[5, 5]]); //will return 25
-main(10, 10, 2, [
-  [7, 3],
-  [3, 7],
-]); //will return 26
-main(10, 10, 3, [[2, 2]]); //will return 23
-// Note to check for every test use npm run test.
+// console.log(main(10, 10, 2, [[4, 4]])); //will return 25
+// main(10, 10, 2, [
+//   [7, 3],
+//   [3, 7],
+// ]); //will return 26
+// main(10, 10, 3, [[2, 2]]); //will return 23
+// // Note to check for every test use npm run test.
 module.exports = main;

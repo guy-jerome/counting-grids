@@ -86,4 +86,8 @@ describe("Counting Grid Test", () => {
   test("N is much larger than the array size", () => {
     expect(main(10, 10, 100, [[5, 5]])).toBe(100);
   });
+
+  test("Huge Area with one array", () => {
+    expect(main(5000, 5000, 3, [[500, 500]])).toBe(25);
+  });
 });
